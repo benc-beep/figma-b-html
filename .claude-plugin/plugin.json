@@ -1,0 +1,23 @@
+{
+  "name": "figma-b-html",
+  "displayName": "Figma → HTML",
+  "version": "1.0.0",
+  "description": "Convert Figma screens into standalone HTML, measured pixel-for-pixel against the Figma render. Command-invoked: \"convert to HTML\" / \"המר ל HTML\".",
+  "author": {
+    "name": "benc-beep"
+  },
+  "homepage": "https://github.com/benc-beep/figma-b-html",
+  "repository": "https://github.com/benc-beep/figma-b-html",
+  "license": "MIT",
+  "keywords": [
+    "figma",
+    "design",
+    "html",
+    "design-to-code",
+    "handoff",
+    "rtl",
+    "pixel-perfect"
+  ],
+  "skills": "./skills/",
+  "commands": "./commands/"
+}

@@ -1,0 +1,226 @@
+# How the HTML is written
+
+One file per screen in `screens/`, standalone, opens by double-clicking.
+
+## The skeleton
+
+```html
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>מסך הבית</title>
+
+<!-- read by build_index.py; keep all four -->
+<meta name="design-width" content="1440">
+<meta name="figma:node" content="12:345">
+<meta name="figma:url" content="https://figma.com/design/…?node-id=12-345">
+<meta name="conversion-mode" content="נאמן">
+
+<link rel="stylesheet" href="../tokens.css">
+<link rel="stylesheet" href="../base.css">
+<style>
+  /* this screen only */
+</style>
+</head>
+<body>
+…
+</body>
+</html>
+```
+
+`lang` and `dir` follow the content. The four `meta` tags are how the gallery
+knows the screen's width, mode and origin — drop them and the card comes out
+blank and the thumbnail wrongly scaled.
+
+Screen CSS goes in one inline `<style>`, not a separate file. It keeps the screen
+readable as a single unit, and a developer opening one file sees everything that
+governs it.
+
+## The two modes
+
+### נאמן — the default
+
+Real tags, real layout, holds up when the content changes.
+
+- `header` `nav` `main` `section` `footer`, `button` for actions, `a` for
+  navigation, `ul`/`li` for repeated items, `h1`–`h3` in order.
+- Flex and grid. **No `position: absolute` for layout** — only for genuine
+  overlays: badges on avatars, a close button in a corner, a dropdown.
+- Repeated Figma layers become repeated markup with one shared class, not five
+  copies of the same inline style.
+- Fixed heights only where the design genuinely fixes them. A fixed height on a
+  text container breaks the moment the text is real.
+- Class names from the design's own vocabulary — `.product-card`, `.price-row`.
+  Not `.frame-427`.
+
+### מדויק — on request
+
+`position: absolute` from the Figma coordinates, inside a
+`position: relative; width: <frameW>px` container. Faster and exact. Say once, in
+the handoff, that it is a presentation artifact and not a development starting
+point.
+
+Even here: no raw hex values. Tokens cost nothing and keep the file editable.
+
+## RTL
+
+The direction comes from the content, and getting it wrong is the most visible
+possible error.
+
+- `dir="rtl"` on `<html>`, not on a wrapper.
+- **Logical properties throughout**: `margin-inline-start`, `padding-inline-end`,
+  `inset-inline-start`, `border-start-start-radius`. They flip automatically;
+  `margin-left` does not.
+- Flex `row` already reverses under RTL. Do not add `row-reverse` to "fix" it —
+  that double-flips it back.
+- Numbers, prices, phone numbers, times and code are **LTR runs inside RTL
+  text**. `1,299 ₪` renders wrong without help. Wrap them:
+  `<span dir="ltr">+972-3-1234567</span>`.
+- Icons that indicate direction — arrows, chevrons, back — mirror. Icons that
+  represent objects — a clock, a logo, a person — do not.
+- `text-align: start`, never `left`.
+
+Check RTL against the reference image specifically. A layout that is mirrored
+where it should not be still scores well on colour and badly on everything else,
+and the diff bands will look like noise.
+
+## Three traps that decide whether this converges
+
+Learned on the first real page. Each one was worth several rounds of the loop.
+
+**1. Figma's padding includes the stroke.** A 25px inset on a bordered frame is
+`border:1px` **plus `padding:24px`** — not `padding:25px`. Get it wrong and every
+card is 2px too tall, and in a column that error compounds downward.
+
+**2. Text boxes are cap-height trimmed.** Figma measures many text layers from
+cap-height to baseline and lays out the siblings below against that smaller box,
+so a layer's box is routinely shorter than the text it draws. Figma's own export
+marks these `[text-box-trim:trim-both] [text-box-edge:cap_alphabetic]`. CSS has
+the same primitive — `text-box: trim-both cap alphabetic` (Chrome 133+):
+
+```css
+.trim { text-box: trim-both cap alphabetic; }
+```
+
+Apply it **only** where the export marked the layer trimmed. Without it, every
+such text node is 8-16px too tall. Where the design also fixes a height, the copy
+genuinely overflows its box: that is the design, so reproduce it — and say so in
+the handoff, because it means the layout has no slack if the copy grows.
+
+**3. RTL flex order — the single most common source of mirrored layouts.**
+
+Figma exports JSX with children in **visual left-to-right order** (the order
+they appear on the canvas, left first). In an HTML document with
+`direction: rtl`, `flex-direction: row` renders the **first DOM child on the
+RIGHT**. Writing Figma's export order straight into HTML therefore mirrors
+every horizontal row.
+
+**The rule:** for every horizontal flex container in an RTL document, write
+the children in **reverse order** compared to Figma's export (or the visual
+left-to-right order you read from the Figma canvas). First DOM child → appears
+on the right. Last DOM child → appears on the left.
+
+```
+Figma visual order (left → right):  [Logo] [Nav links] [Search icon]
+Correct RTL DOM order (right → left): <Logo> <Nav links> <Search icon>
+↑ same as Figma, because RTL reversal means Logo ends up on the right ✓
+
+Figma visual order (left → right):  [Product image] [Details column]
+Correct RTL DOM order: <Product image> <Details column>
+→ RTL renders image on RIGHT, details on LEFT — WRONG if image should be left.
+Fix: write <Details column> <Product image> — RTL puts image on left ✓
+```
+
+**Do not use `flex-direction: row-reverse`** to fix this — it double-flips
+under RTL and breaks responsiveness.
+
+**Verify each row against the Figma screenshot** before moving on. Crop the
+row out and ask: which element is physically rightmost? That element must be
+the first DOM child (or the last, if it's inside a `direction: ltr` sub-tree).
+
+One exception: components that have their own `dir` attribute keep their
+internal order. Numbers, prices and phone numbers wrapped in `dir="ltr"` are
+unaffected by the outer RTL context.
+
+**Specific RTL patterns that commonly appear wrong:**
+
+- **Back button**: text first (right), arrow last (left). Arrow SVG must point
+  LEFT (←) — not the same chevron used for forward/next.
+- **Breadcrumb separator**: arrow points LEFT (←) to indicate depth going
+  left, matching reading direction.
+- **Primary + secondary button pair**: primary action first in DOM (→ appears
+  on the right, the prominent position). Secondary/outline last (→ left).
+- **Price + badge**: price amount first (right), discount badge last (left).
+- **Icon + label in a row**: label first (right), icon last (left) — unless
+  the icon is a directional indicator, which goes on the opposite side.
+- **Spec table row**: label/key first (right), value last (left). Value is
+  usually the wider cell.
+
+## Matching Figma's box model
+
+Where the remaining pixel differences come from, in the order they usually bite:
+
+1. **Line height.** Figma sets it explicitly; the browser default does not match.
+   Set it on every text element.
+2. **Auto-layout is flex.** Figma's spacing between items → `gap`. Its padding →
+   `padding`. Do not reproduce Figma's gaps with margins; the numbers drift.
+3. **Figma strokes sit centred by default**, CSS borders sit inside the box. A
+   1px border shifts content by 1px. Use `box-shadow: inset 0 0 0 1px` when the
+   Figma stroke is inside, or `outline` when it is outside.
+4. **Letter spacing** in Figma is often a percentage; CSS wants `em`.
+   `-2%` → `-0.02em`.
+5. **`box-sizing: border-box`** — already in `base.css`, and Figma's frames
+   behave the same way.
+6. **Text vertical alignment.** A Figma text layer with a fixed height centres
+   its text; a `div` does not. Use flex centring, not padding guessed to match.
+
+## Fonts — mandatory gate before writing any HTML
+
+**Never ship a screen that silently falls back to a system font.** A missing
+font is the single most visible gap between the HTML and the Figma render, and
+it compounds across every text element on the page.
+
+After `get_design_context` identifies the font family:
+
+1. **If the font is on Google Fonts** — link it directly in `<head>`.
+2. **If the font is proprietary / custom** (e.g., `EricaSansFOT`, `Ploni`) —
+   ask him before writing the HTML:
+   > *"הפונט `EricaSansFOT` לא זמין דרך Google Fonts. יש לך את קובצי הפונט?
+   > שלח אותם ואטמיע אותם כ-`@font-face`, או אם יש קובץ HTML קיים שכבר כולל
+   > אותם — שתף אותו. ללא הפונט, הדפדפן ישתמש בפונט מערכת ותראה פער גדול."*
+3. **אם ענה שאין** — ציין ב-handoff ובהתרעה בראש הקובץ:
+   ```html
+   <!-- ⚠️ EricaSansFOT לא הוטמע — הדפדפן ישתמש בפונט מערכת -->
+   ```
+   ורשום כ-**blocker** ב-`notes.json`.
+
+**אל תמשיך לשלב הכתיבה לפני שקיבלת תשובה על הפונט.**
+
+## States
+
+The design usually shows one state. A developer needs the rest, and it is far
+cheaper to add them now:
+
+- `:hover` and `:active` on anything clickable
+- `:focus-visible` — already in `base.css`, do not remove it
+- `:disabled` where the design implies it
+- the longest realistic string in every text slot
+
+**Where the states come from decides everything.** If the intent gate returned
+`+ states`, they are read out of his component variants and measured —
+`states.md`. If it returned AS IS, the only states in the output are the ones
+above that cost nothing and break nothing (`:focus-visible`, a cursor), and the
+handoff says the rest were not designed. Never derive a hover colour from the
+palette and ship it as though the designer chose it.
+
+## Accessibility, the parts that are not optional
+
+These are cheap here and expensive later:
+
+- `alt` on every meaningful image, `alt=""` on decoration
+- a real `<button>`, never a clickable `div`
+- form inputs with a `<label>`, even a visually hidden one
+- computed contrast on text — if a design value fails 4.5:1, **say it once with
+  the number** and let him decide. Do not silently correct the design.

@@ -1,0 +1,17 @@
+{
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
+  "name": "figma-b-html",
+  "description": "Figma → HTML conversion for Claude Code: turn design frames into standalone, pixel-measured HTML.",
+  "owner": {
+    "name": "benc-beep"
+  },
+  "plugins": [
+    {
+      "name": "figma-b-html",
+      "description": "Convert Figma screens into standalone HTML a developer can build from and a client can be shown — then measure the result against the Figma render and iterate until it matches. Reads the design system out of the Figma file itself, so no brand, font or repository is assumed. Handles RTL, component states from real variants, and responsive breakpoints from real frames — and never invents a screen or a state that is not in the file.",
+      "category": "design",
+      "source": "./",
+      "homepage": "https://github.com/benc-beep/figma-b-html"
+    }
+  ]
+}
