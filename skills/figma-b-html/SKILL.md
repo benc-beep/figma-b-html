@@ -2,18 +2,23 @@
 name: figma-b-html
 description: >-
   Convert Figma screens into standalone HTML that a developer can build from and
-  a client can be shown, measured pixel-for-pixel against the Figma render. This
-  skill is COMMAND-INVOKED ONLY. Use it when, and only when, the user writes one
-  of these exact commands: "convert to HTML", "המר ל HTML", "המר ל-HTML", or the
-  slash command /convert-to-html. The command may carry a Figma link, several
-  links, or none. Do NOT use this skill for a figma.com link on its own, for
-  "implement this design from Figma", for "build this screen", for "turn this
-  into code", or for any other phrasing however close in meaning — a link
-  without the command is not a request to convert, and guessing wrong starts a
-  long expensive job the user did not ask for. If a Figma link arrives with no
-  command, do the ordinary thing the message asks for and leave this skill
-  alone. Also do NOT use it for implementing a design inside an existing
-  application codebase; that is design-to-code in the repo, not this.
+  a client can be shown, measured pixel-for-pixel against the Figma render.
+  There are exactly two ways in. FIRST, the explicit command: "convert to HTML",
+  "המר ל HTML", "המר ל-HTML", /convert-to-html, /המר-ל-html — with a Figma link,
+  several links, or none. SECOND, a demand that HTML match a design exactly:
+  "אחד לאחד כמו בפיגמה", "בדיוק כמו בפיגמה", "זהה לפיגמה", "מדויק לפיקסל",
+  "pixel perfect", "1:1 with the design", "it has to look exactly like the
+  Figma", "identical to the design" — any phrasing whose point is that the HTML
+  must be indistinguishable from the Figma frame. That demand IS this skill's
+  whole subject, so honour it whether it arrives alone, alongside a link, or as
+  a correction to HTML already on the table. Everything else stays out. A
+  figma.com link on its own is not a request to convert; neither is "implement
+  this design from Figma", "build this screen", or "turn this into code" —
+  answer those as asked and leave this skill alone, because guessing wrong
+  starts a long expensive job nobody ordered. The one case that looks like entry
+  and is not: pixel-exactness demanded for a screen inside an existing
+  application codebase, where the output belongs in the repo's own components.
+  That is design-to-code in the repo, not this.
 ---
 
 # Figma → HTML
@@ -128,21 +133,9 @@ snapshot where iframes and scripts do not run.
 
 ### 7 — Review gate (mandatory after every delivery)
 
-After the Chrome command, ask these three questions with `AskUserQuestion`
-(multiSelect: false on each, one round):
-
-1. **התוצאה טובה?** — כן, נראה מדויק / לא, יש פערים
-2. **דורש סיבוב נוסף?** — כן, תתקן / לא, מספיק טוב לעכשיו
-3. **תרצה שאעבור סקשן סקשן ותאשר כל אחד בנפרד?** — כן / לא
-
-If answer 1 = "לא" or answer 2 = "כן" → ask him to describe the gaps, then
-fix and re-deliver. If answer 3 = "כן" → walk through each section sequentially.
-For each section, ask him to supply **two things before comparing**:
-- צילום מסך של הסקשן מה-HTML (Cmd+Shift+4 על הסקשן)
-- קישור Figma MCP לנוד של אותו סקשן (לחיצה ימנית על הפריים בפיגמה → Copy link to selection)
-
-Only after receiving both, call `get_design_context` on the node and list the
-gaps as bullets. Do not skip the gate even if the result looks good to you.
+Never close a batch on your own judgement that it looks right. Run the
+three-question review round in `references/handoff.md`, and do not skip it
+because the result looks good to you.
 
 ## The scripts
 

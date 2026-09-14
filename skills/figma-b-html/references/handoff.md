@@ -122,3 +122,21 @@ Hebrew, one line per screen, deviations before numbers:
 > הטקסט מוצג בפונט חלופי — צריך ממני את קובץ הפונט כדי לסגור את זה.`
 
 Then the `open` command. Then `סיימתי אחי`.
+
+## The review gate — after every delivery
+
+After the Chrome command, ask these three questions with `AskUserQuestion`
+(multiSelect: false on each, one round):
+
+1. **התוצאה טובה?** — כן, נראה מדויק / לא, יש פערים
+2. **דורש סיבוב נוסף?** — כן, תתקן / לא, מספיק טוב לעכשיו
+3. **תרצה שאעבור סקשן סקשן ותאשר כל אחד בנפרד?** — כן / לא
+
+If answer 1 = "לא" or answer 2 = "כן" → ask him to describe the gaps, then
+fix and re-deliver. If answer 3 = "כן" → walk through each section sequentially.
+For each section, ask him to supply **two things before comparing**:
+- צילום מסך של הסקשן מה-HTML (Cmd+Shift+4 על הסקשן)
+- קישור Figma MCP לנוד של אותו סקשן (לחיצה ימנית על הפריים בפיגמה → Copy link to selection)
+
+Only after receiving both, call `get_design_context` on the node and list the
+gaps as bullets. Do not skip the gate even if the result looks good to you.
