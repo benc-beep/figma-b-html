@@ -23,9 +23,6 @@ description: >-
 
 # Figma → HTML
 
-Turn Figma screens into static HTML files that stand on their own: no framework,
-no build step, no repository. The output opens in a browser by double-clicking it.
-
 **Who this is for.** A designer, who may not read code — report in the language
 they wrote to you in, as a picture, a table, or one sentence. Never as a diff.
 The HTML is for the developers they hand it to.
@@ -36,30 +33,26 @@ from the file being converted.
 ## Standing rules
 
 1. **Nothing is written outside `~/Design/figma-html/<project>/` without
-   asking.** Fill that folder freely once he has named it; a repo, his Desktop
-   or a project you did not create this session needs a yes first.
+   asking.** A repo, a Desktop, or a project you did not create needs a yes.
 2. **Never report fidelity you did not measure.** "נראה זהה" is not a result.
    The result is the number `compare.py` printed. If a screen was not compared,
    say `לא נבדק` in those words.
 3. **A gap is disclosed, never absorbed.** Reporting a pass over a quiet
    approximation is the one unrecoverable failure here. Sort every gap in
-   `notes.json`: a **blocker** he can fix, a permanent **deviation**, or a flaw
+   `notes.json`: a **blocker** they can fix, a permanent **deviation**, or a flaw
    in the design. `triage.md` decides which.
-4. **Report blockers before numbers**, in Hebrew, one line per screen.
-5. **End every completed task with `סיימתי אחי`.**
+4. **Report blockers before numbers**, one line per screen.
 
 ## The two modes
 
-He decides per batch; when he does not say, use **נאמן**.
+**נאמן** (default) is semantic flex/grid for developers; **מדויק** is absolute
+positioning for showing a client. The designer decides per batch. Both are in
+`html-conventions.md`.
 
-| | **נאמן** — default | **מדויק** |
-|---|---|---|
-| For | handing to developers | showing a client, nothing built behind it |
-| Layout | flex / grid, real tags (`header`, `nav`, `button`, `ul`) | absolute positioning |
-| Fidelity bar | **the same bar** — must match the Figma render at the design width | must match |
-
-The bar does not soften in נאמן mode. If a layout genuinely cannot be both
-semantic and exact, say so and let him choose — do not silently pick.
+**The fidelity bar is identical in both** — match the Figma render at the design
+width. It does not soften because the markup is semantic. If a layout genuinely
+cannot be both semantic and exact, say so and let them choose; never pick
+silently.
 
 ## The pipeline
 
@@ -67,8 +60,8 @@ semantic and exact, say so and let him choose — do not silently pick.
 
 `figma.com/design/<fileKey>/<name>?node-id=1-2` → `fileKey`, `nodeId` = `1:2`.
 No `node-id` → `get_metadata` on the `fileKey` alone lists the pages; show them
-in Hebrew and let him pick. Then `get_metadata` on the page for the frame
-inventory, shown as a Hebrew table. **Do not convert a whole page because he
+in Hebrew and let them pick. Then `get_metadata` on the page for the frame
+inventory, shown as a Hebrew table. **Do not convert a whole page because they
 pasted a page link** — twenty screens is an hour of tool calls.
 
 Direction comes from the content, never an assumption: Hebrew or Arabic glyphs
@@ -76,7 +69,7 @@ Direction comes from the content, never an assumption: Hebrew or Arabic glyphs
 
 ### 2 — The intent gate
 
-A link does not say whether he wants this frame copied faithfully or a
+A link does not say whether they want this frame copied faithfully or a
 responsive, stateful component. **Ask once, before any conversion; never invent
 what the answer needs.** `references/intent.md` has the question round, the
 four-question cap, and where the answer is recorded.
@@ -85,11 +78,11 @@ four-question cap, and where the answer is recorded.
 
 ```bash
 python3 ~/.claude/skills/figma-b-html/scripts/new_project.py \
-  --name "<his name for it>" --dir <rtl|ltr> --figma-url "<the link>"
+  --name "<their name for it>" --dir <rtl|ltr> --figma-url "<the link>"
 ```
 
-It refuses to overwrite an existing project. If it refuses, **ask him** — that
-folder holds work he may still need.
+It refuses to overwrite an existing project. If it refuses, **ask them** — that
+folder holds work they may still need.
 
 ### 4 — Tokens, once per file
 
@@ -106,7 +99,7 @@ Detail in `extraction.md`, `html-conventions.md`, `assets.md`. The shape:
    Save to `.fidelity/<slug>/figma.png`.
 2. Load the `figma-design-to-code` skill, then `get_design_context`. That skill
    is a **mandatory prerequisite** of the tool, not a suggestion.
-3. **Font gate** — before writing any HTML, resolve the font (`html-conventions.md § Fonts`). If the font is proprietary, ask him for the files or a source HTML that already has them. Do not proceed without an answer.
+3. **Font gate** — before writing any HTML, resolve the font (`html-conventions.md § Fonts`). If the font is proprietary, ask them for the files or a source HTML that already has them. Do not proceed without an answer.
 4. `download_assets` → `assets/`. Icons as inline SVG, photos as files.
 5. Write `screens/<slug>.html`.
 6. **Verify** — `references/fidelity.md`; if it does not match, `triage.md`.
@@ -127,17 +120,14 @@ Write `README-dev.md`'s per-screen section (`references/handoff.md`), then:
 open -a "Google Chrome" ~/Design/figma-html/<project>/index.html
 ```
 
-**Give him that command, not a preview-pane screenshot** — his live editor
-exists only in his real Chrome, and the pane renders local files as a static
+**Give them that command, not a preview-pane screenshot** — their live editor
+exists only in their real Chrome, and the pane renders local files as a static
 snapshot where iframes and scripts do not run.
 
-### 7 — Review gate (mandatory after every delivery)
+Then run the **review gate** in `references/handoff.md` — three questions, every
+time. Never close a batch on your own judgement that it looks right.
 
-Never close a batch on your own judgement that it looks right. Run the
-three-question review round in `references/handoff.md`, and do not skip it
-because the result looks good to you.
-
-## The scripts
+## The parts
 
 | | |
 |---|---|
@@ -148,25 +138,20 @@ because the result looks good to you.
 | `scripts/build_index.py` | rebuilds the gallery from `screens/` |
 | `scripts/states_board.py` | a board of every state, plus a probe page per state |
 | `scripts/bundle.py` | folds one screen + its assets into a single sendable file |
-
-Run `--help` on any. Three things they know so you need not: Chrome writes the
-PNG then never exits; it will not open a window under 500px (narrow widths
-render in an iframe); an absolute iframe in an RTL document anchors wrong.
-
-## Files
-
-| | |
-|---|---|
-| `references/intent.md` | **the gate** — what he actually wants, asked once |
+| `references/intent.md` | **the gate** — what they actually want, asked once |
 | `references/extraction.md` | which Figma tool, in which order, and their limits |
 | `references/tokens.md` | Variables → `tokens.css`; what to do when there are none |
 | `references/fidelity.md` | the verification loop, the stopping rule, its blind spots |
 | `references/triage.md` | **when it does not match** — the four causes and what to do |
 | `references/html-conventions.md` | the two modes, RTL, fonts, semantics, responsive |
-| `references/responsive.md` | breakpoints built from his frames, scored per width |
-| `references/states.md` | states read from his variants, and how to measure one |
+| `references/responsive.md` | breakpoints built from their frames, scored per width |
+| `references/states.md` | states read from their variants, and how to measure one |
 | `references/assets.md` | images and icons |
 | `references/handoff.md` | what the developer receives |
+
+Run `--help` on any script. Three things they know so you need not: Chrome
+writes the PNG then never exits; it will not open a window under 500px (narrow
+widths render in an iframe); an absolute iframe in RTL anchors wrong.
 
 ## Maintenance
 

@@ -1,6 +1,6 @@
-# Breakpoints, built from his designs
+# Breakpoints, built from their designs
 
-Only after the intent gate returned `+ breakpoints` and he has supplied a frame
+Only after the intent gate returned `+ breakpoints` and they have supplied a frame
 per width. **A width with no Figma frame does not get built.** Inventing a
 mobile layout and calling the screen responsive is the failure this whole path
 exists to prevent — the number would look fine because there would be nothing
@@ -12,7 +12,7 @@ He gets **one** `screens/<slug>.html` with media queries, not a screen per
 width. That is the deliverable a developer can use; three separate files leave
 them to work out which is authoritative.
 
-The breakpoints come from **his frame widths**, never from a convention. If his
+The breakpoints come from **their frame widths**, never from a convention. If their
 frames are 1440 / 834 / 390, the queries are written against 834 and 390 — not
 768 and 375 because those are the usual numbers.
 
@@ -25,8 +25,8 @@ have already got to a number.
 /* the design width, untouched by anything below */
 .card { width: 286px; }
 
-@media (max-width: 833px)  { /* his tablet frame */ }
-@media (max-width: 389px)  { /* his mobile frame */ }
+@media (max-width: 833px)  { /* their tablet frame */ }
+@media (max-width: 389px)  { /* their mobile frame */ }
 ```
 
 ## Per-width references
@@ -75,16 +75,16 @@ count, its own type sizes, its own nav. Take those from the frame, the same way
 you took the desktop ones — `get_design_context` per width, not "shrink the
 desktop and hope".
 
-Where his frames genuinely leave a width undefined — a component that appears
-at 1440 and 390 but not in the 834 frame — that is a question for him, recorded
+Where their frames genuinely leave a width undefined — a component that appears
+at 1440 and 390 but not in the 834 frame — that is a question for them, recorded
 as a blocker. It is not a gap to fill.
 
 ## Reporting
 
-`notes.json` carries a line per width, and the report to him names each:
+`notes.json` carries a line per width, and the report to them names each:
 
 > `דסקטופ 1440 — 1.4%. טאבלט 834 — 2.1%. מובייל 390 — 1.9%. שלושתם מול המסגרות
 > שלך, לא מול הסקה.`
 
 That last clause is the point of this whole file. Say it, because the previous
-behaviour was the opposite and he needs to know which he is getting.
+behaviour was the opposite and they need to know which they are getting.

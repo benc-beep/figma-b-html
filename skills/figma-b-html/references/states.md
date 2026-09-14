@@ -1,4 +1,4 @@
-# States, taken from his variants
+# States, taken from their variants
 
 Only after the intent gate returned `+ states`. **States are read out of the
 Figma file, never invented.** A hover colour you chose because it looked
@@ -7,8 +7,8 @@ measured against nothing.
 
 ## Ask for the links before you go looking
 
-The gate already put this to him (`intent.md`): supply the component sets, or
-have you search. Take him up on the first whenever he offers, because the
+The gate already put this to them (`intent.md`): supply the component sets, or
+have you search. Take them up on the first whenever they offer, because the
 search has a hard limit —
 
 **A component set that lives in a separate library cannot be read through the
@@ -23,7 +23,7 @@ it generates (`property1?: "Default" | "active"`) lists only the values used in
 that export, not every variant the set defines. A single-value union is not
 evidence that only one variant exists.
 
-What breaks the deadlock is one link from him — open the component set in
+What breaks the deadlock is one link from them — open the component set in
 Figma, *Copy link to selection*. Then everything below works.
 
 ## Find what actually exists
@@ -40,7 +40,7 @@ In Figma a component's states live as **variants** in a component set —
 **Report what you found before asking anything.** "I found variants for the
 main button (default / hover / disabled) and none for the cards" is a useful
 sentence; "which states do you want?" is not. A component with no variant for
-a state he wants is a request to him, recorded as a blocker.
+a state they want is a request to them, recorded as a blocker.
 
 Often only one or two properties change between variants — a fill, a border, an
 elevation. Take those; do not restyle the whole component from the variant's
@@ -96,7 +96,7 @@ python3 ~/.claude/skills/figma-b-html/scripts/states_board.py --project <path>
 That writes two things from one spec:
 
 - **`states.html`** — every component × every state, labelled, using the
-  screen's own stylesheet. This is what he and the developer look at.
+  screen's own stylesheet. This is what they and the developer look at.
 - **`.fidelity/states/NN-<component>-<state>.html`** — one page holding only
   that component in that state, so it can be captured and scored.
 

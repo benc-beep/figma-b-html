@@ -74,10 +74,11 @@ possible error.
   `inset-inline-start`, `border-start-start-radius`. They flip automatically;
   `margin-left` does not.
 - Flex `row` already reverses under RTL. Do not add `row-reverse` to "fix" it —
-  that double-flips it back.
+  that double-flips it back and breaks responsiveness.
 - Numbers, prices, phone numbers, times and code are **LTR runs inside RTL
   text**. `1,299 ₪` renders wrong without help. Wrap them:
-  `<span dir="ltr">+972-3-1234567</span>`.
+  `<span dir="ltr">+972-3-1234567</span>`. A subtree carrying its own `dir`
+  keeps its internal order and ignores the outer context.
 - Icons that indicate direction — arrows, chevrons, back — mirror. Icons that
   represent objects — a clock, a logo, a person — do not.
 - `text-align: start`, never `left`.
@@ -86,9 +87,26 @@ Check RTL against the reference image specifically. A layout that is mirrored
 where it should not be still scores well on colour and badly on everything else,
 and the diff bands will look like noise.
 
-## Three traps that decide whether this converges
+### Child order — decide it per row, never by rule
 
-Learned on the first real page. Each one was worth several rounds of the loop.
+In an RTL document `flex-direction: row` puts the **first DOM child on the
+right**. Figma's export usually lists children in visual left-to-right order, so
+copying that order straight into HTML usually mirrors the row.
+
+**Usually is not always, and assuming it is costs a round.** One real file mixed
+both inside a single screen: the card's spec-chip row was authored RTL, while
+the button row, the stepper and the back control were authored LTR. Nothing in
+the export tells you which one you are holding.
+
+So decide **per row, against the reference render**. Crop the row out of the
+Figma screenshot and ask: which element is physically rightmost? That element is
+the first DOM child. Then ask the same question about the next row — the answer
+does not carry over, not even within one component.
+
+## Two traps that decide whether this converges
+
+Learned on the first real page; each was worth several rounds of the loop.
+The third, RTL child order, is above under **RTL**.
 
 **1. Figma's padding includes the stroke.** A 25px inset on a bordered frame is
 `border:1px` **plus `padding:24px`** — not `padding:25px`. Get it wrong and every
@@ -108,55 +126,6 @@ Apply it **only** where the export marked the layer trimmed. Without it, every
 such text node is 8-16px too tall. Where the design also fixes a height, the copy
 genuinely overflows its box: that is the design, so reproduce it — and say so in
 the handoff, because it means the layout has no slack if the copy grows.
-
-**3. RTL flex order — the single most common source of mirrored layouts.**
-
-Figma exports JSX with children in **visual left-to-right order** (the order
-they appear on the canvas, left first). In an HTML document with
-`direction: rtl`, `flex-direction: row` renders the **first DOM child on the
-RIGHT**. Writing Figma's export order straight into HTML therefore mirrors
-every horizontal row.
-
-**The rule:** for every horizontal flex container in an RTL document, write
-the children in **reverse order** compared to Figma's export (or the visual
-left-to-right order you read from the Figma canvas). First DOM child → appears
-on the right. Last DOM child → appears on the left.
-
-```
-Figma visual order (left → right):  [Logo] [Nav links] [Search icon]
-Correct RTL DOM order (right → left): <Logo> <Nav links> <Search icon>
-↑ same as Figma, because RTL reversal means Logo ends up on the right ✓
-
-Figma visual order (left → right):  [Product image] [Details column]
-Correct RTL DOM order: <Product image> <Details column>
-→ RTL renders image on RIGHT, details on LEFT — WRONG if image should be left.
-Fix: write <Details column> <Product image> — RTL puts image on left ✓
-```
-
-**Do not use `flex-direction: row-reverse`** to fix this — it double-flips
-under RTL and breaks responsiveness.
-
-**Verify each row against the Figma screenshot** before moving on. Crop the
-row out and ask: which element is physically rightmost? That element must be
-the first DOM child (or the last, if it's inside a `direction: ltr` sub-tree).
-
-One exception: components that have their own `dir` attribute keep their
-internal order. Numbers, prices and phone numbers wrapped in `dir="ltr"` are
-unaffected by the outer RTL context.
-
-**Specific RTL patterns that commonly appear wrong:**
-
-- **Back button**: text first (right), arrow last (left). Arrow SVG must point
-  LEFT (←) — not the same chevron used for forward/next.
-- **Breadcrumb separator**: arrow points LEFT (←) to indicate depth going
-  left, matching reading direction.
-- **Primary + secondary button pair**: primary action first in DOM (→ appears
-  on the right, the prominent position). Secondary/outline last (→ left).
-- **Price + badge**: price amount first (right), discount badge last (left).
-- **Icon + label in a row**: label first (right), icon last (left) — unless
-  the icon is a directional indicator, which goes on the opposite side.
-- **Spec table row**: label/key first (right), value last (left). Value is
-  usually the wider cell.
 
 ## Matching Figma's box model
 
@@ -185,14 +154,14 @@ it compounds across every text element on the page.
 After `get_design_context` identifies the font family:
 
 1. **If the font is on Google Fonts** — link it directly in `<head>`.
-2. **If the font is proprietary / custom** (e.g., `EricaSansFOT`, `Ploni`) —
-   ask him before writing the HTML:
-   > *"הפונט `EricaSansFOT` לא זמין דרך Google Fonts. יש לך את קובצי הפונט?
+2. **If the font is proprietary or licensed** — ask before writing the HTML,
+   naming the font the file actually uses:
+   > *"הפונט `<שם הפונט>` לא זמין דרך Google Fonts. יש לך את קובצי הפונט?
    > שלח אותם ואטמיע אותם כ-`@font-face`, או אם יש קובץ HTML קיים שכבר כולל
    > אותם — שתף אותו. ללא הפונט, הדפדפן ישתמש בפונט מערכת ותראה פער גדול."*
 3. **אם ענה שאין** — ציין ב-handoff ובהתרעה בראש הקובץ:
    ```html
-   <!-- ⚠️ EricaSansFOT לא הוטמע — הדפדפן ישתמש בפונט מערכת -->
+   <!-- ⚠️ <שם הפונט> לא הוטמע — הדפדפן ישתמש בפונט מערכת -->
    ```
    ורשום כ-**blocker** ב-`notes.json`.
 
@@ -209,7 +178,7 @@ cheaper to add them now:
 - the longest realistic string in every text slot
 
 **Where the states come from decides everything.** If the intent gate returned
-`+ states`, they are read out of his component variants and measured —
+`+ states`, they are read out of their component variants and measured —
 `states.md`. If it returned AS IS, the only states in the output are the ones
 above that cost nothing and break nothing (`:focus-visible`, a cursor), and the
 handoff says the rest were not designed. Never derive a hover colour from the
@@ -223,4 +192,4 @@ These are cheap here and expensive later:
 - a real `<button>`, never a clickable `div`
 - form inputs with a `<label>`, even a visually hidden one
 - computed contrast on text — if a design value fails 4.5:1, **say it once with
-  the number** and let him decide. Do not silently correct the design.
+  the number** and let them decide. Do not silently correct the design.

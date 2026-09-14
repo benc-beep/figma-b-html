@@ -1,6 +1,6 @@
 # The verification loop
 
-This is the part that replaces the dozen prompts he runs by hand. Without it the
+This is the part that replaces the dozen prompts they run by hand. Without it the
 tool is just a nicer way to paste Figma output; with it, the screen is measured
 and the number is real.
 
@@ -25,7 +25,7 @@ until you hit the stopping rule below.
 ## It did not match — read `triage.md` first
 
 "It does not match" is four different situations — a browser limitation, a
-missing input you should ask him for, a structural mistake of yours, or an
+missing input you should ask them for, a structural mistake of yours, or an
 inconsistency in the design itself. They need opposite responses.
 **`references/triage.md` is the decision table.** Do not improvise it.
 
@@ -58,7 +58,7 @@ from noise:
   gradients and antialiasing, which are usually not worth chasing.
 
 **5. The number itself.** A stopping condition, not a verdict. Never report it to
-him without the shape.
+them without the shape.
 
 ## What the number is blind to
 
@@ -127,7 +127,7 @@ Then confirm nothing overflows, rather than judging it by eye:
 python3 $S/measure.py --file $P/screens/<slug>.html --width 375 --overflow
 ```
 
-**If he supplied frames for these widths, this is not the pass to run** — go to
+**If they supplied frames for these widths, this is not the pass to run** — go to
 `responsive.md`, where each width is scored against its own reference. What
 follows is only for a screen the intent gate settled as AS IS, where the small
 widths exist so the page does not break rather than to match a design.
@@ -138,18 +138,18 @@ text clipped or overlapping, an element pushed off-screen, touch targets under
 widths were not designed and were not measured.
 
 A screen that is perfect at 1440 and broken at 375 is not done. If a fix at 375
-would cost fidelity at 1440, that is his call — show him both and ask.
+would cost fidelity at 1440, that is their call — show them both and ask.
 
-## What he sees
+## What they see
 
-Not the diff percentage on its own — it means nothing to him. Send him
+Not the diff percentage on its own — it means nothing to them. Send them
 `.fidelity/<slug>/side-by-side.png` (Figma | HTML | diff, labelled) and one
 Hebrew line per screen.
 
-**Order the batch by what he can act on**, not by screen order:
+**Order the batch by what they can act on**, not by screen order:
 
-1. **חוסמים first** — what you need from him, and what it unblocks.
-2. Then screens that need a decision from him (category 4, or a fidelity/
+1. **חוסמים first** — what you need from them, and what it unblocks.
+2. Then screens that need a decision from them (category 4, or a fidelity/
    responsive trade-off).
 3. Then the ones that are simply done, in one line together.
 

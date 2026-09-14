@@ -1,7 +1,7 @@
 {
   "name": "figma-b-html",
   "displayName": "Figma → HTML",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "Convert Figma screens into standalone HTML, measured pixel-for-pixel against the Figma render. Invoked by command (\"convert to HTML\" / \"המר ל HTML\") or by asking for HTML that matches a design 1:1.",
   "author": {
     "name": "benc-beep"

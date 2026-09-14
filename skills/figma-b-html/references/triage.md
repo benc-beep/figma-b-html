@@ -8,21 +8,21 @@ rounds.
 | | How you recognise it | What you do |
 |---|---|---|
 | **1. The browser cannot do it** | small, does not improve, on the list below | record in `deviations`, move on |
-| **2. Something is missing on this machine** | `DIFFUSE` across all text, or a solid block where an image should be | **`blockers`** — he can fix it in a minute, so ask |
+| **2. Something is missing on this machine** | `DIFFUSE` across all text, or a solid block where an image should be | **`blockers`** — they can fix it in a minute, so ask |
 | **3. You have not solved it yet** | the number drops, then plateaus | change tactic, below. Do not repeat the same round |
-| **4. The design itself is inconsistent** | one sharp, local difference where the HTML looks *more* correct | **tell him.** Do not reproduce the flaw |
+| **4. The design itself is inconsistent** | one sharp, local difference where the HTML looks *more* correct | **tell them.** Do not reproduce the flaw |
 
 ## Category 2 — ask, don't work around
 
 The common ones: a font that is not installed, a Figma permission error, more
 than 20 images or 20 SVGs in one node, a component whose source lives in a
-library file he has not shared.
+library file they have not shared.
 
-Each of these has a one-minute fix on his side and no good workaround on yours.
+Each of these has a one-minute fix on their side and no good workaround on yours.
 Substituting a font and tuning the spacing until the score looks acceptable
 produces a file that is wrong in a way nobody can see — and it breaks the moment
 the real font arrives. Put it in `blockers`, keep converting the other screens,
-and tell him what you need at the top of the report.
+and tell them what you need at the top of the report.
 
 ## Category 4 — the one nobody plans for
 
@@ -40,8 +40,8 @@ Say what you found, in Hebrew, with the coordinates, and offer both readings:
 > `בכרטיס השני הכותרת גולשת מהתיבה — זה קורה גם בפיגמה עצמה, ב-HTML זה נראה נכון.
 > לתקן בעיצוב, או שאשחזר את זה כמו שזה?`
 
-He is the designer. A tool that finds problems in his file is doing him a favour,
-as long as it says so plainly instead of silently working around it. Whatever he
+They are the designer. A tool that finds problems in their file is doing them a
+favour, as long as it says so plainly instead of working around it. Whatever they
 answers, record the decision in `deviations` so the developer sees it too.
 
 ## What a browser genuinely cannot reproduce
@@ -99,7 +99,7 @@ One file per screen at `.fidelity/<slug>/notes.json`. The gallery reads it.
 **`blockers` and `deviations` are not the same thing, and mixing them is the
 mistake this field exists to prevent.**
 
-- A **blocker** is something *he* can resolve, usually in a minute: a font file,
+- A **blocker** is something *they* can resolve, usually in a minute: a font file,
   a Figma permission, an asset cap, a decision about an inconsistency in the
   design. It gets a red chip on the card, a red box with the text, and a count
   in the gallery header — *"1 ממתינים לך"*. Phrase it as a request: what you
@@ -109,7 +109,7 @@ mistake this field exists to prevent.**
 Every entry is in Hebrew and says **what** differs. "מינור" and "כמעט זהה" are
 not deviations; they are refusals to say anything.
 
-**`accepted`** is his decision, never yours. Set it only when he has looked at a
+**`accepted`** is their decision, never yours. Set it only when they have looked at a
 screen and said it is good enough. The card then shows `אושר · 2.05%` in neutral
 blue instead of red — flagged as settled, but **still showing the real number**.
 Hiding the measurement once someone approves it is how a folder quietly stops
@@ -141,8 +141,8 @@ one of them is an acceptable outcome:
 | | |
 |---|---|
 | passes | `pass: true`, nothing more to say |
-| stopped short, cause recorded | `deviations`, and `blockers` if he can help |
-| he looked at it and approved | `accepted: true` with his reason, real number still shown |
+| stopped short, cause recorded | `deviations`, and `blockers` if they can help |
+| they looked at it and approved | `accepted: true` with their reason, real number still shown |
 
 The unacceptable outcome is a screen reported as matching that was never
 measured, or one whose gap was absorbed silently.

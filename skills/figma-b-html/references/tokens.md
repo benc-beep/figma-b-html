@@ -65,16 +65,16 @@ If the design uses a font that is not on this machine, the render will fall back
 and the comparison will show text differences everywhere. When that happens:
 
 1. Say it plainly — *"הפונט X לא מותקן, הטקסט מוצג בפונט חלופי"*.
-2. Ask him for the font file. If he has it, drop it in `assets/fonts/` and add an
+2. Ask them for the font file. If they have it, drop it in `assets/fonts/` and add an
    `@font-face` with a relative `url()`.
-3. If he does not, record it in `notes.json` for every affected screen and let
+3. If they do not, record it in `notes.json` for every affected screen and let
    the numbers be honest. **Do not tune spacing to make a substitute font hit the
    pixel target** — that bakes a lie into the file, and it breaks the moment the
    real font arrives.
 
 Web fonts from Google Fonts are fine to link, and they make the file work on any
 machine. A local `@font-face` is more faithful but only works next to the file.
-Prefer the local file when he has it; say which one you used.
+Prefer the local file when they have it; say which one you used.
 
 ## When the file has no Variables
 
@@ -86,9 +86,9 @@ Plenty of real files use raw styles. Then:
    Values within about 2% are the same intent.
 3. Name them by **role where the usage makes it obvious** (`--surface-card`,
    `--text-muted`), by scale where it does not (`--gray-300`).
-4. Say so in `tokens.css` and to him: *"בקובץ אין Variables — בניתי טוקנים מהערכים
+4. Say so in `tokens.css` and to them: *"בקובץ אין Variables — בניתי טוקנים מהערכים
    שבפועל, כדאי לאשר את השמות."*
 
 An accident kept as a token is better than a hex in a screen file: it is visible,
 named, and one edit fixes every use. But flag the near-duplicates you merged, so
-he can tell you if two of them were meant to be different.
+they can tell you if two of them were meant to be different.

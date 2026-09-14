@@ -16,7 +16,7 @@ https://figma.com/design/<fileKey>/<AnyName>?node-id=12-345
 - `/board/` is FigJam and `/slides/` is Slides. Neither is convertible here;
   say so rather than trying.
 - No `node-id` at all → do not guess one. Call `get_metadata` with just the
-  `fileKey`; it returns the top-level pages, and he picks.
+  `fileKey`; it returns the top-level pages, and they pick.
 
 ## The order
 
@@ -100,7 +100,7 @@ costs more than the check.
 
 ## Rate limits
 
-A big batch will hit them. When it happens: stop, tell him in one Hebrew
+A big batch will hit them. When it happens: stop, tell them in one Hebrew
 sentence how many screens are done and how many remain, and offer to continue
 later. Do not retry in a tight loop — that extends the block.
 

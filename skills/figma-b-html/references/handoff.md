@@ -102,7 +102,7 @@ comparison:
 python3 ~/.claude/skills/figma-b-html/scripts/build_index.py --project <path>
 ```
 
-Then give him the command, not a screenshot:
+Then give them the command, not a screenshot:
 
 ```bash
 open -a "Google Chrome" ~/Design/figma-html/<project>/index.html
@@ -114,14 +114,15 @@ gallery's iframes do not load and its script does not run, so the page looks
 broken when it is not. That snapshot behaviour has already caused one false bug
 report — do not repeat it.
 
-## The summary he reads
+## The summary they read
 
-Hebrew, one line per screen, deviations before numbers:
+In the language they wrote to you in, one line per screen, deviations before
+numbers. The Hebrew example below is just an example:
 
 > `4 מסכים הומרו. שלושה תואמים מתחת ל-1%. במסך התשלום הפונט המקורי לא מותקן ולכן
 > הטקסט מוצג בפונט חלופי — צריך ממני את קובץ הפונט כדי לסגור את זה.`
 
-Then the `open` command. Then `סיימתי אחי`.
+Then the `open` command.
 
 ## The review gate — after every delivery
 
@@ -132,9 +133,9 @@ After the Chrome command, ask these three questions with `AskUserQuestion`
 2. **דורש סיבוב נוסף?** — כן, תתקן / לא, מספיק טוב לעכשיו
 3. **תרצה שאעבור סקשן סקשן ותאשר כל אחד בנפרד?** — כן / לא
 
-If answer 1 = "לא" or answer 2 = "כן" → ask him to describe the gaps, then
+If answer 1 = "לא" or answer 2 = "כן" → ask them to describe the gaps, then
 fix and re-deliver. If answer 3 = "כן" → walk through each section sequentially.
-For each section, ask him to supply **two things before comparing**:
+For each section, ask them to supply **two things before comparing**:
 - צילום מסך של הסקשן מה-HTML (Cmd+Shift+4 על הסקשן)
 - קישור Figma MCP לנוד של אותו סקשן (לחיצה ימנית על הפריים בפיגמה → Copy link to selection)
 
