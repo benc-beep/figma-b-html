@@ -23,34 +23,34 @@ description: >-
 
 # Figma → HTML
 
-**Who this is for.** A designer, who may not read code — report in the language
-they wrote to you in, as a picture, a table, or one sentence. Never as a diff.
-The HTML is for the developers they hand it to.
-
-**Product-agnostic.** No brand, font or repo is baked in; every value comes
-from the file being converted.
+**Who this is for.** A designer, who may not read code — report as a picture, a
+table, or one sentence. Never as a diff. The HTML goes to their developers.
+**Nothing is product-specific**: no brand, font or repo is baked in, and every
+value comes out of the file being converted.
 
 ## Standing rules
 
-1. **Nothing is written outside `~/Design/figma-html/<project>/` without
+1. **Speak the language they opened in** — every question, report and blocker.
+   Hebrew strings in these files are **examples, never required text**. A
+   terminal has no bidi support, so an RTL sentence carrying Latin runs
+   (`HTML`, `1440px`) comes out scrambled: keep the sentence in one script.
+2. **Nothing is written outside `~/Design/figma-html/<project>/` without
    asking.** A repo, a Desktop, or a project you did not create needs a yes.
-2. **Never report fidelity you did not measure.** "נראה זהה" is not a result.
-   The result is the number `compare.py` printed. If a screen was not compared,
-   say `לא נבדק` in those words.
-3. **A gap is disclosed, never absorbed.** Reporting a pass over a quiet
+3. **Never report fidelity you did not measure.** "It looks the same" is not a
+   result. The result is the number `compare.py` printed. If a screen was not
+   compared, say so in those words.
+4. **A gap is disclosed, never absorbed.** Reporting a pass over a quiet
    approximation is the one unrecoverable failure here. Sort every gap in
    `notes.json`: a **blocker** they can fix, a permanent **deviation**, or a flaw
    in the design. `triage.md` decides which.
-4. **Report blockers before numbers**, one line per screen.
+5. **Report blockers before numbers**, one line per screen.
 
 ## The two modes
 
-**נאמן** (default) is semantic flex/grid for developers; **מדויק** is absolute
-positioning for showing a client. The designer decides per batch. Both are in
-`html-conventions.md`.
-
-**The fidelity bar is identical in both** — match the Figma render at the design
-width. It does not soften because the markup is semantic. If a layout genuinely
+**נאמן** / faithful (default) is semantic flex/grid; **מדויק** / exact is absolute
+positioning for showing a client — both in `html-conventions.md`, chosen per
+batch. **The fidelity bar is identical in both**: match the Figma render at the
+design width. It does not soften because the markup is semantic. If a layout
 cannot be both semantic and exact, say so and let them choose; never pick
 silently.
 
@@ -60,9 +60,9 @@ silently.
 
 `figma.com/design/<fileKey>/<name>?node-id=1-2` → `fileKey`, `nodeId` = `1:2`.
 No `node-id` → `get_metadata` on the `fileKey` alone lists the pages; show them
-in Hebrew and let them pick. Then `get_metadata` on the page for the frame
-inventory, shown as a Hebrew table. **Do not convert a whole page because they
-pasted a page link** — twenty screens is an hour of tool calls.
+and let the user pick, then `get_metadata` on the page for a frame inventory.
+**Do not convert a whole page because they pasted a page link** — twenty
+screens is an hour of tool calls.
 
 Direction comes from the content, never an assumption: Hebrew or Arabic glyphs
 → `rtl`. Record it; it drives the whole layout.

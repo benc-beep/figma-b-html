@@ -8,7 +8,7 @@ to measure it against.
 
 ## One file, not three
 
-He gets **one** `screens/<slug>.html` with media queries, not a screen per
+They get **one** `screens/<slug>.html` with media queries, not a screen per
 width. That is the deliverable a developer can use; three separate files leave
 them to work out which is authoritative.
 

@@ -35,7 +35,7 @@ reproduce the flaw to win the score** — that puts a bug into the developer's
 starting point, and it is the one kind of error that survives all the way to
 production looking intentional.
 
-Say what you found, in Hebrew, with the coordinates, and offer both readings:
+Say what you found, with the coordinates, and offer both readings:
 
 > `בכרטיס השני הכותרת גולשת מהתיבה — זה קורה גם בפיגמה עצמה, ב-HTML זה נראה נכון.
 > לתקן בעיצוב, או שאשחזר את זה כמו שזה?`
@@ -106,7 +106,8 @@ mistake this field exists to prevent.**
   need, and what it will fix.
 - A **deviation** is permanent and nobody can fix it. Grey text on the card.
 
-Every entry is in Hebrew and says **what** differs. "מינור" and "כמעט זהה" are
+Every entry says **what** differs, in the user's language. "Minor" and
+"almost identical" are
 not deviations; they are refusals to say anything.
 
 **`accepted`** is their decision, never yours. Set it only when they have looked at a

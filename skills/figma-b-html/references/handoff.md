@@ -108,7 +108,7 @@ Then give them the command, not a screenshot:
 open -a "Google Chrome" ~/Design/figma-html/<project>/index.html
 ```
 
-**His real Chrome, specifically.** His live design-editing extension only exists
+**Their real Chrome, specifically.** A live design-editing extension exists only
 there, and the agent preview pane renders local files as a static snapshot: the
 gallery's iframes do not load and its script does not run, so the page looks
 broken when it is not. That snapshot behaviour has already caused one false bug
@@ -126,18 +126,23 @@ Then the `open` command.
 
 ## The review gate — after every delivery
 
-After the Chrome command, ask these three questions with `AskUserQuestion`
-(multiSelect: false on each, one round):
+After the Chrome command, ask these three with `AskUserQuestion` (multiSelect:
+false on each, one round), **in the user's own language** — the Hebrew in
+brackets is the example, not the string:
 
-1. **התוצאה טובה?** — כן, נראה מדויק / לא, יש פערים
-2. **דורש סיבוב נוסף?** — כן, תתקן / לא, מספיק טוב לעכשיו
-3. **תרצה שאעבור סקשן סקשן ותאשר כל אחד בנפרד?** — כן / לא
+1. **Is the result good?** — yes, looks accurate / no, there are gaps
+   *(התוצאה טובה? — כן, נראה מדויק / לא, יש פערים)*
+2. **Another round?** — yes, fix it / no, good enough for now
+   *(דורש סיבוב נוסף? — כן, תתקן / לא, מספיק טוב)*
+3. **Go section by section, approving each?** — yes / no
+   *(לעבור סקשן סקשן? — כן / לא)*
 
-If answer 1 = "לא" or answer 2 = "כן" → ask them to describe the gaps, then
-fix and re-deliver. If answer 3 = "כן" → walk through each section sequentially.
-For each section, ask them to supply **two things before comparing**:
-- צילום מסך של הסקשן מה-HTML (Cmd+Shift+4 על הסקשן)
-- קישור Figma MCP לנוד של אותו סקשן (לחיצה ימנית על הפריים בפיגמה → Copy link to selection)
+If 1 = no or 2 = yes → ask them to describe the gaps, then fix and re-deliver.
+If 3 = yes → walk the sections in order. For each one, ask for **two things
+before comparing**:
+- a screenshot of that section from the HTML (Cmd+Shift+4 over it)
+- a Figma link to that section's node (right-click the frame → Copy link to
+  selection)
 
 Only after receiving both, call `get_design_context` on the node and list the
 gaps as bullets. Do not skip the gate even if the result looks good to you.

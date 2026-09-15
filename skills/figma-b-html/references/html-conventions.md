@@ -40,7 +40,7 @@ governs it.
 
 ## The two modes
 
-### נאמן — the default
+### נאמן / faithful — the default
 
 Real tags, real layout, holds up when the content changes.
 
@@ -55,7 +55,7 @@ Real tags, real layout, holds up when the content changes.
 - Class names from the design's own vocabulary — `.product-card`, `.price-row`.
   Not `.frame-427`.
 
-### מדויק — on request
+### מדויק / exact — on request
 
 `position: absolute` from the Figma coordinates, inside a
 `position: relative; width: <frameW>px` container. Faster and exact. Say once, in
@@ -156,16 +156,17 @@ After `get_design_context` identifies the font family:
 1. **If the font is on Google Fonts** — link it directly in `<head>`.
 2. **If the font is proprietary or licensed** — ask before writing the HTML,
    naming the font the file actually uses:
-   > *"הפונט `<שם הפונט>` לא זמין דרך Google Fonts. יש לך את קובצי הפונט?
-   > שלח אותם ואטמיע אותם כ-`@font-face`, או אם יש קובץ HTML קיים שכבר כולל
-   > אותם — שתף אותו. ללא הפונט, הדפדפן ישתמש בפונט מערכת ותראה פער גדול."*
-3. **אם ענה שאין** — ציין ב-handoff ובהתרעה בראש הקובץ:
+   > *"`<font>` is not on Google Fonts. Do you have the font files? Send them
+   > and I will embed them as `@font-face` — or share an HTML file that already
+   > carries them. Without it the browser substitutes a system font and you will
+   > see a large gap."* (in their language; this is the shape, not the string)
+3. **If they do not have it** — say so in the handoff, warn at the top of the
+   file, and record a **blocker** in `notes.json`:
    ```html
-   <!-- ⚠️ <שם הפונט> לא הוטמע — הדפדפן ישתמש בפונט מערכת -->
+   <!-- ⚠️ <font> not embedded — the browser will substitute a system font -->
    ```
-   ורשום כ-**blocker** ב-`notes.json`.
 
-**אל תמשיך לשלב הכתיבה לפני שקיבלת תשובה על הפונט.**
+**Do not start writing until the font question has an answer.**
 
 ## States
 

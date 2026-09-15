@@ -148,7 +148,7 @@ Hebrew line per screen.
 
 **Order the batch by what they can act on**, not by screen order:
 
-1. **חוסמים first** — what you need from them, and what it unblocks.
+1. **Blockers first** — what you need from them, and what it unblocks.
 2. Then screens that need a decision from them (category 4, or a fidelity/
    responsive trade-off).
 3. Then the ones that are simply done, in one line together.

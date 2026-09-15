@@ -14,12 +14,12 @@ them. That rule is why the gate exists at all.
 
 Skip it, silently, when:
 
-- **His message already says.** "as is", "just convert this", "רק להעתיק" →
+- **Their message already says.** "as is", "just convert this", "רק להעתיק" →
   AS IS. "with all the breakpoints", "כולל סטייטים" → that. Do not re-ask what
   they already told you.
 - **`project.json` already records an intent** for this Figma file. One answer
   covers the whole batch — asking again on screen 7 of 12 is intolerable.
-  He can change it any time by saying so; then update the file.
+  They can change it any time by saying so; then update the file.
 
 Otherwise ask, once, before step 2 of the pipeline.
 
@@ -39,9 +39,11 @@ not "the smaller ones".
 
 ## The questions — four, maximum
 
-Ask them as one round, in Hebrew, using `AskUserQuestion` for the discrete
-choices so they can click rather than type. Only ask what the previous answer
-makes necessary.
+Ask them as one round, using `AskUserQuestion` for the discrete choices so they
+can click rather than type. Only ask what the previous answer makes necessary.
+
+**Ask in the language they opened the conversation in** — see the language rule
+in `SKILL.md`. The Hebrew below is an example of a question, not the question.
 
 **1 — always.** What should this become?
 
@@ -59,7 +61,8 @@ ask for the frames for the others. If they say none exist, say plainly that a
 responsive build needs designs to build from, and offer: convert this width
 only, or wait until the frames exist. Do not offer to infer them.
 
-**3 — only if states.** Ask **before** going looking: *"תשלח לי את הקומפוננט
+**3 — only if states.** Ask **before** going looking — *"Will you send me the
+component sets, or should I search for them myself?"* / *"תשלח לי את הקומפוננט
 סטים, או שאחפש בעצמי?"* Hunting first is the expensive order — it costs several
 tool calls and often dead-ends anyway, because a component set that lives in a
 separate library cannot be enumerated through the MCP at all (`states.md`).
@@ -78,10 +81,11 @@ If a fifth question would be needed, the round has failed as a round. Switch
 from asking to reporting: give them the current state and let them choose the
 next move with the consequences visible.
 
-> **איפה זה עומד:** דסקטופ 1440 הומר, 1.8% הפרש. מובייל 375 ממתין לקישור.
-> סטייטים: מצאתי variants לכפתור הראשי בלבד — לכרטיסים אין.
-> **אפשרויות:** (א) לסגור את הדסקטופ ולהמשיך כשיהיו מסגרות, (ב) להמיר גם את
-> הסטייטים של הכפתור עכשיו ולהשאיר את הכרטיסים, (ג) משהו אחר.
+> **Where this stands:** desktop 1440 converted, 1.8% diff. Mobile 375 is
+> waiting on a link. States: I found variants for the main button only — the
+> cards have none.
+> **Options:** (a) close the desktop and continue when the frames exist,
+> (b) convert the button's states now and leave the cards, (c) something else.
 
 Three things make that report work: what is **done** with its number, what is
 **blocked** and on what, and **concrete options** rather than an open question.
