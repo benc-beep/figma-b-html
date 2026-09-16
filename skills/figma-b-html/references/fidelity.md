@@ -19,6 +19,14 @@ python3 $S/compare.py --reference $P/.fidelity/<slug>/figma.png \
   --render $P/.fidelity/<slug>/render.png --out $P/.fidelity/<slug>
 ```
 
+**`--height` is not optional when you are comparing.** Without it `capture.py`
+picks the height by scanning the PNG for where content ends, which trims any
+blank band at the foot of the page. Compare that against a full-height Figma
+reference and the number is wrong in the alarming direction — a screen with
+21px of trailing background scored 4.74% cropped and 2.34% at its real height.
+If `compare.py` prints a height delta you did not expect, re-capture with
+`--height <frameH>` before believing anything else it says.
+
 Then **read the diff image**, fix, and run both again. Repeat until it passes or
 until you hit the stopping rule below.
 
