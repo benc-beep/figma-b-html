@@ -20,19 +20,23 @@ Restart Claude Code. Type `/` and `/convert-to-html` should be there.
 
 ## Use
 
-The skill is **command-invoked only**. Pasting a Figma link does nothing on its
-own — deliberately, so a link dropped in conversation never starts a long
-conversion nobody asked for.
+**Tell it to convert** and it converts:
 
 ```
 convert to HTML   https://www.figma.com/design/…?node-id=1234-5678
 ```
 
-Also: `המר ל HTML` · `/convert-to-html` · `/המר-ל-html`
+Also: `המר ל HTML` · `/convert-to-html` · `/המר-ל-html` — or any demand that the
+HTML match the design exactly ("pixel perfect", "אחד לאחד כמו בפיגמה").
 
-Before converting anything it asks **once** what the link is for — a faithful
-copy of that frame, or breakpoints and/or component states as well — and
-records the answer per Figma file, so it does not ask again on screen 7 of 12.
+**Paste a Figma link without saying that**, and it offers rather than assumes:
+one question, four options — carry on without the skill, or convert as-is, with
+breakpoints, or with component states. It never starts a long conversion off a
+link alone, and never stays quiet either; you cannot choose a tool you do not
+know is there.
+
+Either way the answer is recorded per Figma file, so it does not ask again on
+screen 7 of 12.
 
 ## What you get
 

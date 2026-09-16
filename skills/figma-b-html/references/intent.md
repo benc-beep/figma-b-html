@@ -23,6 +23,13 @@ Skip it, silently, when:
 
 Otherwise ask, once, before step 2 of the pipeline.
 
+**If you got here because a link was pasted rather than commanded**, the offer
+and question 1 are the *same question* — one round with four options: *carry on
+without the skill* / AS IS / + breakpoints / + states. Never ask "shall I
+convert?" and then "what should it become?"; that is two interruptions for one
+decision, and it burns a question against the cap below. Declining is a real
+answer: drop the subject and do what they actually asked.
+
 ## Read the link first
 
 Pull the frame's width from `get_metadata` and name the form factor in the

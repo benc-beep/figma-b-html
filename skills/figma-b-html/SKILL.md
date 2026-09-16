@@ -3,22 +3,20 @@ name: figma-b-html
 description: >-
   Convert Figma screens into standalone HTML that a developer can build from and
   a client can be shown, measured pixel-for-pixel against the Figma render.
-  There are exactly two ways in. FIRST, the explicit command: "convert to HTML",
-  "המר ל HTML", "המר ל-HTML", /convert-to-html, /המר-ל-html — with a Figma link,
-  several links, or none. SECOND, a demand that HTML match a design exactly:
-  "אחד לאחד כמו בפיגמה", "בדיוק כמו בפיגמה", "זהה לפיגמה", "מדויק לפיקסל",
-  "pixel perfect", "1:1 with the design", "it has to look exactly like the
-  Figma", "identical to the design" — any phrasing whose point is that the HTML
-  must be indistinguishable from the Figma frame. That demand IS this skill's
-  whole subject, so honour it whether it arrives alone, alongside a link, or as
-  a correction to HTML already on the table. Everything else stays out. A
-  figma.com link on its own is not a request to convert; neither is "implement
-  this design from Figma", "build this screen", or "turn this into code" —
-  answer those as asked and leave this skill alone, because guessing wrong
-  starts a long expensive job nobody ordered. The one case that looks like entry
-  and is not: pixel-exactness demanded for a screen inside an existing
-  application codebase, where the output belongs in the repo's own components.
-  That is design-to-code in the repo, not this.
+  THREE ways in. ONE, the explicit command: "convert to HTML", "המר ל HTML",
+  "המר ל-HTML", /convert-to-html, /המר-ל-html — convert straight away. TWO, a
+  demand that HTML match a design exactly: "אחד לאחד כמו בפיגמה", "זהה לפיגמה",
+  "מדויק לפיקסל", "pixel perfect", "1:1 with the design", "it has to look
+  exactly like the Figma" — also convert straight away, whether it arrives
+  alone, with a link, or as a correction to HTML already on the table. THREE,
+  and this one only ASKS: any figma.com/design or figma.com/file link the user
+  pastes, however it is phrased and whatever else the message says — including
+  "implement this design from Figma", "build this screen", or a bare link with
+  no words at all. Load and put one question: convert this to measured HTML, or
+  carry on without the skill. Never start converting on a link alone, and never
+  stay silent on one either — the choice is the user's and they cannot make it
+  if they do not know the tool exists. Do NOT use this skill where no Figma link
+  and no command is present.
 ---
 
 # Figma → HTML
@@ -56,16 +54,22 @@ silently.
 
 ## The pipeline
 
+### 0 — Why you are here
+
+On a command or a 1:1 demand, skip to 1. On a **pasted Figma link** you are here
+to offer: ask **one** question carrying both decisions — carry on without the
+skill / AS IS / + breakpoints / + states — so the offer costs no round on top of
+the gate (`intent.md`). Extract nothing first; if they decline, do the task they
+asked for. One answer per file: twelve links is one question, not twelve.
+
 ### 1 — Orient
 
 `figma.com/design/<fileKey>/<name>?node-id=1-2` → `fileKey`, `nodeId` = `1:2`.
-No `node-id` → `get_metadata` on the `fileKey` alone lists the pages; show them
-and let the user pick, then `get_metadata` on the page for a frame inventory.
-**Do not convert a whole page because they pasted a page link** — twenty
-screens is an hour of tool calls.
-
-Direction comes from the content, never an assumption: Hebrew or Arabic glyphs
-→ `rtl`. Record it; it drives the whole layout.
+No `node-id` → `get_metadata` on the `fileKey` lists the pages; let the user
+pick, then `get_metadata` on that page for a frame inventory. **Do not convert a
+whole page because they pasted a page link** — twenty screens is an hour of
+calls. Direction comes from the content, never assumption: Hebrew or Arabic
+glyphs → `rtl`. Record it; it drives the whole layout.
 
 ### 2 — The intent gate
 
@@ -94,17 +98,15 @@ details and the no-Variables fallback in `references/tokens.md`. Do this
 
 Detail in `extraction.md`, `html-conventions.md`, `assets.md`. The shape:
 
-1. `get_screenshot` with `maxDimension` = the frame's larger edge, or the
-   reference is scaled down and every comparison is measured against a blur.
-   Save to `.fidelity/<slug>/figma.png`.
-2. Load the `figma-design-to-code` skill, then `get_design_context`. That skill
-   is a **mandatory prerequisite** of the tool, not a suggestion.
+1. `get_screenshot`, `maxDimension` = the frame's larger edge — a downscaled
+   reference puts a floor under the score. Save to `.fidelity/<slug>/figma.png`.
+2. Load `figma-design-to-code`, then `get_design_context`. That skill is a
+   **mandatory prerequisite** of the tool, not a suggestion.
 3. **Font gate** — before writing any HTML, resolve the font (`html-conventions.md § Fonts`). If the font is proprietary, ask them for the files or a source HTML that already has them. Do not proceed without an answer.
 4. `download_assets` → `assets/`. Icons as inline SVG, photos as files.
 5. Write `screens/<slug>.html`.
-6. **Verify** — `references/fidelity.md`; if it does not match, `triage.md`.
-   Icons need a check of their own (`measure.py --icons`) — the score is
-   area-weighted and cannot see a distorted one.
+6. **Verify** — `fidelity.md`; if it does not match, `triage.md`. Icons need
+   their own check (`measure.py --icons`): the score cannot see a stretched one.
 7. Breakpoints and states only if the gate asked for them: `responsive.md`,
    `states.md`. Otherwise confirm 375/768 merely do not break.
 
@@ -115,17 +117,15 @@ python3 ~/.claude/skills/figma-b-html/scripts/build_index.py --project <path>
 ```
 
 Write `README-dev.md`'s per-screen section (`references/handoff.md`), then:
-
 ```bash
 open -a "Google Chrome" ~/Design/figma-html/<project>/index.html
 ```
 
 **Give them that command, not a preview-pane screenshot** — their live editor
 exists only in their real Chrome, and the pane renders local files as a static
-snapshot where iframes and scripts do not run.
-
-Then run the **review gate** in `references/handoff.md` — three questions, every
-time. Never close a batch on your own judgement that it looks right.
+snapshot where iframes and scripts do not run. Then run the **review gate** in
+`references/handoff.md` — three questions, every time. Never close a batch on
+your own judgement that it looks right.
 
 ## The parts
 
